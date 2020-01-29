@@ -170,7 +170,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
     if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
       // Create Relationships as necessary.
       foreach ($form->_values['params'] as $particpantId => $formParams) {
-        if (empty($formParams['credit_card_number'])) {
+        if (!empty($formParams['additional_registration_type'])) {
           $primaryContactId = $form->get('primaryContactId');
           $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
           if ($formParams['additional_registration_type'] == 1) {
