@@ -171,13 +171,22 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
       // Create Relationships as necessary.
       foreach ($form->_values['params'] as $particpantId => $formParams) {
         if (empty($formParams['credit_card_number'])) {
-          $primaryContactId = $this->get('primaryContactId');
+          $primaryContactId = $form->get('primaryContactId');
           $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
           if ($formParams['additional_registration_type'] == 1) {
-            $relationship_type_id = CRM_Core_PseudoConstant::getKey('CRM_Core_BAO_Relationship', 'relationship_type_id', 'Partner Of');
+            $relationship_type_id = civicrm_api3('RelationshipType', 'getsingle', ['name_a_b' => 'Partner Of'])['id'];
           }
           else {
-            $relationship_type_id = CRM_Core_PseudoConstant::getKey('CRM_Core_BAO_Relationship', 'relationship_type_id', 'Child Of');
+            $relationship_type_id = civicrm_api3('RelationshipType', 'getsingle', ['name_a_b' => 'Child Of'])['id'];
+            civicrm_api3('Contact', 'create', [
+              'do_not_email' => 1,
+              'do_not_phone' => 1,
+              'do_not_trade' => 1,
+              'do_not_sms' => 1,
+              'is_opt_out' => 1,
+              'contact_id' => $participantDetails['contact_id'],
+              'contact_type' => 'Individual',
+            ]);
           }
           $check = civicrm_api3('Relationship', 'get', ['contact_id_a' => $participantDetails['contact_id'], 'contact_id_b' => $primaryContactId, 'relationship_type_id' => $relationship_type_id]);
           if (!$check['count']) {
