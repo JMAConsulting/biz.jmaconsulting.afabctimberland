@@ -202,7 +202,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
           'do_not_trade' => 1,
           'do_not_sms' => 1,
           'is_opt_out' => 1,
-          'contact_id' => $participantDetails['contact_id'],
+          'contact_id' => $child,
           'contact_type' => 'Individual',
         ]);
         $relationshipParams = [
