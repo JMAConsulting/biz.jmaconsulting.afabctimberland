@@ -6,7 +6,7 @@ use CRM_Afabctimberland_ExtensionUtil as E;
 /**
  * Implements hook_civicrm_config().
  *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/ 
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/
  */
 function afabctimberland_civicrm_config(&$config) {
   _afabctimberland_civix_civicrm_config($config);
@@ -154,43 +154,76 @@ function afabctimberland_civicrm_buildForm($formName, &$form) {
     if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
       CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/additionalParticipants.js');
       $form->add('select', 'additional_registration_type', E::ts('Is this a registration for an additional partner/parent or child?'), [
-        1 => E::ts('Parent/Partner Registration'),
+        1 => E::ts('Partner'),
         2 => E::ts('Child'),
+        3 => E::ts('Additional/Accompanying Adult'),
       ], TRUE);
       CRM_Core_Region::instance('form-body')->add([
         'template' => 'CRM/Event/Form/Registration/AdditionalRegistrationType.tpl',
       ]);
     }
-  }   
+  }
 }
 
 function afabctimberland_civicrm_postProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Confirm') {
     $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Social');
     if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
+      $primaryPartner = $form->get('primaryContactId');
+      $partners = $children = [];
       // Create Relationships as necessary.
       foreach ($form->_values['params'] as $particpantId => $formParams) {
         if (!empty($formParams['additional_registration_type'])) {
-          $primaryContactId = $form->get('primaryContactId');
           $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
           if ($formParams['additional_registration_type'] == 1) {
+            $partners[] = $participantDetails['contact_id'];
             $relationship_type_id = civicrm_api3('RelationshipType', 'getsingle', ['name_a_b' => 'Partner Of'])['id'];
+            $relationshipParams = [
+              'contact_id_a' => $participantDetails['contact_id'],
+              'contact_id_b' => $primaryPartner,
+              'relationship_type_id' => $relationship_type_id,
+            ];
+            $relationshipCheck = civicrm_api3('Relationship', 'get', $relationshipParams);
+            if (empty($relationshipCheck['count'])) {
+              $relationshipParams['start_date'] = date('Y-m-d');
+              civicrm_api3('Relationship', 'create', $relationshipParams);
+            }
           }
-          else {
-            $relationship_type_id = civicrm_api3('RelationshipType', 'getsingle', ['name_a_b' => 'Child Of'])['id'];
-            civicrm_api3('Contact', 'create', [
-              'do_not_email' => 1,
-              'do_not_phone' => 1,
-              'do_not_trade' => 1,
-              'do_not_sms' => 1,
-              'is_opt_out' => 1,
-              'contact_id' => $participantDetails['contact_id'],
-              'contact_type' => 'Individual',
-            ]);
+          elseif ($formParams['additional_registration_type'] == 2) {
+            $children[] = $participantDetails['contact_id'];
           }
-          $check = civicrm_api3('Relationship', 'get', ['contact_id_a' => $participantDetails['contact_id'], 'contact_id_b' => $primaryContactId, 'relationship_type_id' => $relationship_type_id]);
-          if (!$check['count']) {
-            civicrm_api3('Relationship', 'create', ['contact_id_a' => $participantDetails['contact_id'], 'contact_id_b' => $primaryContactId, 'relationship_type_id' => $relationship_type_id, 'start_date' => date('Y-m-d')]);
+        }
+      }
+      foreach ($children as $child) {
+        $relationship_type_id = civicrm_api3('RelationshipType', 'getsingle', ['name_a_b' => 'Child Of'])['id'];
+        civicrm_api3('Contact', 'create', [
+          'do_not_email' => 1,
+          'do_not_phone' => 1,
+          'do_not_trade' => 1,
+          'do_not_sms' => 1,
+          'is_opt_out' => 1,
+          'contact_id' => $participantDetails['contact_id'],
+          'contact_type' => 'Individual',
+        ]);
+        $relationshipParams = [
+          'contact_id_a' => $child,
+          'relationship_type_id' => $relationship_type_id,
+          'contact_id_b' => $primaryPartner,
+        ];
+        $relationshipCheck = civicrm_api3('Relationship', 'get', $relationshipParams);
+        if (empty($relationshipCheck)) {
+          $relationshipParams['start_date'] = date('Y-m-d');
+          civicrm_api3('Relationship', 'create', $relationshipParams);
+        }
+        if (!empty($partners)) {
+          foreach ($partners as $partner) {
+            unset($relationshipParams['start_date']);
+            $relationshipParams['contact_id_b'] = $partner;
+            $relationshipCheck = civicrm_api3('Relationship', 'get', $relationshipParams);
+            if (empty($relationshipCheck)) {
+              $relationshipParams['start_date'] = date('Y-m-d');
+              civicrm_api3('Relationship', 'create', $relationshipParams);
+            }
           }
         }
       }
