@@ -1,19 +1,55 @@
 (function($) {
   var parentGuardianField = $('#editrow-custom_350');
   if (parentGuardianField.length) {
-    $('#editrow-custom_351').hide();
+    if ($("[name=custom_350]:checked").val() != "1") {
+      $('#editrow-custom_351').show();
+    }
+    else {
+      $('#editrow-custom_351').hide();
+    }
+    if ($('#custom_351').val().toLowerCase().indexOf('foster') !== -1) {
+      $('#editrow-custom_158').show();
+    }
+    else {
+      $('#editrow-custom_158').hide();
+    }
     var additionalRegistrationType = $('#additional_registration_type');
+    if (additionalRegistrationType.val() != "2") {
+      parentGuardianFieldShow(false);
+    }
+    else {
+      parentGuardianFieldShow(true);
+    }
     additionalRegistrationType.on('change', function() {
-      if (additionalRegistrationType.val() != 1) {
-        parentGuardianField.hide();
+      if (additionalRegistrationType.val() != "2") {
+        parentGuardianFieldShow(false);
       }
       else {
-        parentGuardianField.show();
+        parentGuardianFieldShow(true);
       }
     });
-    parentGuardianField.on('change', function() {
-      if (parentGuardianField.val() != 1) {
+    function parentGuardianFieldShow(show) {
+      if (show) {
+        parentGuardianField.show();
+      }
+      else {
+        parentGuardianField.hide();
+      }
+    };
+    $("[name=custom_350]").change(function() {
+      if ($(this).val() != "1") {
         $('#editrow-custom_351').show();
+      }
+      else {
+        $('#editrow-custom_351').hide();
+      }
+    });
+    $('#custom_351').change(function() {
+      if ($(this).val().toLowerCase().indexOf('foster') !== -1) {
+        $('#editrow-custom_158').show();
+      }
+      else {
+        $('#editrow-custom_158').hide();
       }
     });
   }

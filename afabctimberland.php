@@ -165,6 +165,16 @@ function afabctimberland_civicrm_buildForm($formName, &$form) {
   }
 }
 
+function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
+  if ($formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
+    if (!empty($fields['custom_351'])) {
+      if (stristr($fields['custom_351'], 'foster') && empty($fields['custom_158'])) {
+        $errors['custom_158'] = E::ts('You need to supply your social worker\'s email address');
+      }
+    }
+  }
+}
+
 function afabctimberland_civicrm_postProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Confirm') {
     $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Social');
@@ -211,7 +221,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
           'contact_id_b' => $primaryPartner,
         ];
         $relationshipCheck = civicrm_api3('Relationship', 'get', $relationshipParams);
-        if (empty($relationshipCheck)) {
+        if (empty($relationshipCheck['count'])) {
           $relationshipParams['start_date'] = date('Y-m-d');
           civicrm_api3('Relationship', 'create', $relationshipParams);
         }
@@ -220,7 +230,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
             unset($relationshipParams['start_date']);
             $relationshipParams['contact_id_b'] = $partner;
             $relationshipCheck = civicrm_api3('Relationship', 'get', $relationshipParams);
-            if (empty($relationshipCheck)) {
+            if (empty($relationshipCheck['count'])) {
               $relationshipParams['start_date'] = date('Y-m-d');
               civicrm_api3('Relationship', 'create', $relationshipParams);
             }
