@@ -286,10 +286,9 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
  */
 function sendSocialWorkerEmail($socialWorkersDetails, $partners, $clientID, $form) {
   foreach ($socialWorkersDetails as $socialWorker) {
-    $registration = civicrm_api3('Participant', 'getsingle', ['contact_id' => $clientID, 'event_id' => $form->_eventId);
+    $registration = civicrm_api3('Participant', 'getsingle', ['contact_id' => $clientID, 'event_id' => $form->_eventId]);
     if (!empty($partners)) {
       $partnerDetails = civicrm_api3('Contact', 'getsingle', ['id' => $partners[0]]);
-      $registration = civicrm_api3('Participant', 'getsingle', ['contact_id' => $partners[0], 'event_id' => $form->_eventId);
     }
     else {
       $partnerDetails = [];
