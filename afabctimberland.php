@@ -168,8 +168,16 @@ function afabctimberland_civicrm_buildForm($formName, &$form) {
 function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
   if ($formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
     if (!empty($fields['custom_351'])) {
-      if (stristr($fields['custom_351'], 'foster') && empty($fields['custom_158'])) {
-        $errors['custom_158'] = E::ts('You need to supply your social worker\'s email address');
+      if (stristr($fields['custom_351'], 'foster')) {
+        if (empty($fields['custom_355'])) {
+          $errors['custom_355'] = E::ts('You need to supply your social worker\'s email address');
+        }
+        if (empty($fields['custom_356'])) {
+          $errors['custom_355'] = E::ts('You need to supply your social worker\'s first name');
+        }
+        if (empty($fields['custom_357'])) {
+          $errors['custom_355'] = E::ts('You need to supply your social worker\'s last name');
+        }
       }
     }
   }
@@ -177,6 +185,8 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
 
 function afabctimberland_civicrm_postProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Confirm') {
+    $sendEmail = FALSE;
+    $socialWorkerEmails = $socialWorkerDetails = [];
     $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Social');
     if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
       $primaryPartner = $form->get('primaryContactId');
@@ -201,6 +211,29 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
           }
           elseif ($formParams['additional_registration_type'] == 2) {
             $children[] = $participantDetails['contact_id'];
+            if (!empty($formParams['custom_355'])) {
+              if (!in_array($formParams['custom_355'], $socialWorkerEmails)) {
+                $socialWorkerEmails[] = $formParams['custom_355'];
+                $swParams = [
+                  'first_name' => $formParams['custom_356'],
+                  'last_name' => $formParams['custom_357'],
+                  'email' => $formParams['custom_355'],
+                  'contact_type' => 'Individual',
+                ];
+                $dedupeParams = CRM_Dedupe_Finder::formatParams($swParams, 'Individual');
+                $dedupeParams['check_permissions'] = FALSE;
+                $dupes = CRM_Dedupe_Finder::dupesByParams($dedupeParams, 'Individual', NULL, [], 9);
+                $swParams['contact_id'] = CRM_Utils_Array::value('0', $dupes, NULL);
+                $result = civicrm_api3('Contact', 'create', $swParams);
+                $socialWorkerDetails[] = [
+                  'email' => $formParams['custom_355'],
+                  'first_name' => $formParams['custom_356'],
+                  'last_name' => $formParams['custom_357'],
+                  'contact_id' => $result['id'],
+                ];
+              }
+              $sendEmail = TRUE;
+            }
           }
         }
       }
@@ -237,6 +270,50 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
           }
         }
       }
+      if ($sendEmail) {
+        sendSocialWorkerEmail($socialWorkerDetails, $partners, $primaryPartner, $form);
+      }
     }
+  }
+}
+
+/**
+ * If any social worker information has been added send them an email requesting confirmation
+ * @param array $socialWorkersDetails,
+ * @param array $partners,
+ * @param int $clientID
+ * @param CRM_Core_Form $form
+ */
+function sendSocialWorkerEmail($socialWorkersDetails, $partners, $clientID, $form) {
+  foreach ($socialWorkersDetails as $socialWorker) {
+    $registration = civicrm_api3('Participant', 'getsingle', ['contact_id' => $clientID, 'event_id' => $form->_eventId);
+    if (!empty($partners)) {
+      $partnerDetails = civicrm_api3('Contact', 'getsingle', ['id' => $partners[0]]);
+      $registration = civicrm_api3('Participant', 'getsingle', ['contact_id' => $partners[0], 'event_id' => $form->_eventId);
+    }
+    else {
+      $partnerDetails = [];
+    }
+    $tplParams = [
+      'email' => $socialWorker['email'],
+      'display_name' => CRM_Contact_BAO_Contact::displayName($socialWorker['contact_id']),
+      'client' => CRM_Contact_BAO_Contact::displayName($clientID),
+      'start_date' => date('M j, Y', strtotime(CRM_Core_DAO::getFieldValue('CRM_Event_DAO_Event', $form->_eventId, 'start_date'))),
+      'end_date' => date('M j, Y', strtotime(CRM_Core_DAO::getFieldValue('CRM_Event_DAO_Event', $form->_eventId, 'start_date'))),
+      'swid' => $socialWorker['contact_id'],
+      'pfname' => CRM_Utils_Array::value('first_name', $partnerDetails, NULL),
+      'plname' => CRM_Utils_Array::value('last_name', $partnerDetails, NULL),
+      'pid' => $registration['id'],
+    ];
+    $coordinator = CRM_Core_DAO::getFieldValue('CRM_Event_DAO_Event', $form->_eventId, 'confirm_from_email');
+    $sendTemplateParams = [
+      'messageTemplateID' => 234,
+      'contact_id' => $clientID,
+      'tplParams' => $tplParams,
+      'from' => '"' . $coordinator . '" <' . $coordinator . '>',
+      'toName' => CRM_Contact_BAO_Contact::displayName($socialWorker['contact_id']),
+      'toEmail' => $socialWorker['email'],
+    ];
+    CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
   }
 }
