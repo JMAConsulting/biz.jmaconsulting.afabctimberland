@@ -35,9 +35,12 @@
     function parentGuardianFieldShow(show) {
       if (show) {
         parentGuardianField.show();
+        $('#editrow-custom_351').show();
       }
       else {
         parentGuardianField.hide();
+        $('#editrow-custom_351').hide();
+        $('#editrow-custom_351').val('');
       }
     };
     $("[name=custom_350]").change(function() {
@@ -57,7 +60,7 @@
       else {
         $('#editrow-custom_356').hide();
         $('#editrow-custom_357').hide();
-        $('#editrow-custom_158').hide();
+        $('#editrow-custom_355').hide();
       }
     });
   }

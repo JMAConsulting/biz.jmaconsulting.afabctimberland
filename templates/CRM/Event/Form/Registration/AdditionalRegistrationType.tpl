@@ -6,7 +6,7 @@
 {literal}
 <script type="text/javascript">
   CRM.$(function($) {
-    $('.additional_registration_type-section').appendTo($('.custom_pre-section'));
+    $('.additional_registration_type-section').prependTo($('.custom_pre-section'));
   });
 </script>
 {/literal}
