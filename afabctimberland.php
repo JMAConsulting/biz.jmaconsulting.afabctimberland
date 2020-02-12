@@ -153,6 +153,7 @@ function afabctimberland_civicrm_buildForm($formName, &$form) {
     $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Social');
     if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
       CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/additionalParticipants.js');
+      CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/priceSetValidation.js');
       $form->add('select', 'additional_registration_type', E::ts('Is this a registration for an additional partner/parent or child?'), [
         1 => E::ts('Partner'),
         2 => E::ts('Child'),
