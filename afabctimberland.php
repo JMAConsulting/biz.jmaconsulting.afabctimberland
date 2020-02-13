@@ -183,7 +183,7 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
         }
       }
     }
-    if (($fields['price_1445'] == '4099' || $fields['price_1445'] == '4094') && empty($fields['custom_359'])) {
+    if ($fields['price_1445'] != '4099' && $fields['price_1445'] != '4094' && empty($fields['custom_359'])) {
       $errors['custom_359'] = E::ts('Please supply the age of this participant');
     }
   }
@@ -240,6 +240,36 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
               }
               $sendEmail = TRUE;
             }
+          }
+          else {
+            if ($formParams['price_1445'] != '4099' && $formParams['price_1445'] != '4094') {
+              $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
+              civicrm_api3('Contact', 'create', [
+                'do_not_email' => 1,
+                'do_not_phone' => 1,
+                'do_not_trade' => 1,
+                'do_not_sms' => 1,
+                'is_opt_out' => 1,
+                'contact_id' => $participantDetails['contact_id'],
+                'contact_type' => 'Individual',
+              ]);
+            }
+          }
+        }
+        elseif (is_numeric($particpantId)) {
+          try {
+           $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
+            civicrm_api3('Contact', 'create', [
+              'do_not_email' => 1,
+              'do_not_phone' => 1,
+              'do_not_trade' => 1,
+              'do_not_sms' => 1,
+              'is_opt_out' => 1,
+              'contact_id' => $participantDetails['contact_id'],
+              'contact_type' => 'Individual',
+            ]);
+          }
+          catch (Exception $e) {   
           }
         }
       }
