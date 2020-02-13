@@ -183,6 +183,9 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
         }
       }
     }
+    if (($fields['price_1445'] == '4099' || $fields['price_1445'] == '4094') && empty($fields['custom_359'])) {
+      $errors['custom_359'] = E::ts('Please supply the age of this participant');
+    }
   }
 }
 

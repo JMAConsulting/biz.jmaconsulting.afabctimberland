@@ -1,4 +1,18 @@
 (function($) {
+  $('[name=price_1445]:checked').change(function($) {
+    if ($(this).val() == '4094' || $(this).val() == '4111') {
+      $('#editrow-custom_359').hide();
+    }
+    else {
+      $('#editrow-custom_359').show();
+    }
+  };
+  if ($['[name=price_1445]:checked'].val() == '4094' || $['[name=price_1445]:checked'].val() == '4111') {
+    $('#editrow-custom_359').hide();
+  }
+  else {
+    $('#editrow-custom_359').show();
+  }
   var parentGuardianField = $('#editrow-custom_350');
   if (parentGuardianField.length) {
     if ($("[name=custom_350]:checked").val() != "1") {
