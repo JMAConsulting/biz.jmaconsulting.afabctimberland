@@ -6,7 +6,7 @@
     else {
       $('#editrow-custom_359').show();
     }
-  };
+  });
   if ($['[name=price_1445]:checked'].val() == '4094' || $['[name=price_1445]:checked'].val() == '4111') {
     $('#editrow-custom_359').hide();
   }

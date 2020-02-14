@@ -42,7 +42,7 @@
       }
     }
     else if ($(this).val() == '4115') {
-      if ($('#price_1447').val() == '4102' || $('#price_1449').val() = '4114') {
+      if ($('#price_1447').val() == '4102' || $('#price_1449').val() == '4114') {
         alert('You have already selected an option for 11am');
       }
     }
@@ -53,7 +53,7 @@
 
   $('#price_1447').change(function() {
     if ($(this).val() == '4102') {
-      if ($('#price_1450').val() == '4115' || $('#price_1449').val() = '4114') {
+      if ($('#price_1450').val() == '4115' || $('#price_1449').val() == '4114') {
         alert('You have already selected an option for 11am');
       }
     }
