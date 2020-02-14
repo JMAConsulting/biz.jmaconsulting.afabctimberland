@@ -1,18 +1,4 @@
 (function($) {
-  $('[name=price_1445]:checked').change(function($) {
-    if ($(this).val() == '4094' || $(this).val() == '4111') {
-      $('#editrow-custom_359').hide();
-    }
-    else {
-      $('#editrow-custom_359').show();
-    }
-  });
-  if ($('[name=price_1445]:checked').val() == '4094' || $['[name=price_1445]:checked'].val() == '4111') {
-    $('#editrow-custom_359').hide();
-  }
-  else {
-    $('#editrow-custom_359').show();
-  }
   var parentGuardianField = $('#editrow-custom_350');
   if (parentGuardianField.length) {
     var parentFieldValue = $('[name=custom_350]:checked').val();
@@ -60,6 +46,7 @@
     function parentGuardianFieldShow(show) {
       if (show) {
         parentGuardianField.show();
+        $('#editrow-custom_359').show();
       }
       else {
         parentGuardianField.hide();
@@ -68,9 +55,10 @@
         $('#custom_356').val("");
         $('#custom_357').val("");
         $('#editrow-custom_351').hide();
-        $('#editrow-custom_355').show();
-        $('#editrow-custom_356').show();
-        $('#editrow-custom_357').show();
+        $('#editrow-custom_355').hide();
+        $('#editrow-custom_356').hide();
+        $('#editrow-custom_357').hide();
+        $('#editrow-custom_359').hide();
       }
     };
     $("[name=custom_350]").change(function() {
