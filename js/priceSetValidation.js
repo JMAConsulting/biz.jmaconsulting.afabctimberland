@@ -24,7 +24,7 @@
       }
     }
     else if ($(this).val() == '4114') {
-      if ($('#price_1447').val() == '4102' || $('#price_1450').val() = '4115') {
+      if ($('#price_1447').val() == '4102' || $('#price_1450').val() == '4115') {
         alert('You have already selected an option for 11am');
       }
     }

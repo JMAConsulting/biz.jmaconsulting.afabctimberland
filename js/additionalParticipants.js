@@ -7,7 +7,7 @@
       $('#editrow-custom_359').show();
     }
   });
-  if ($['[name=price_1445]:checked'].val() == '4094' || $['[name=price_1445]:checked'].val() == '4111') {
+  if ($('[name=price_1445]:checked').val() == '4094' || $['[name=price_1445]:checked'].val() == '4111') {
     $('#editrow-custom_359').hide();
   }
   else {
@@ -15,11 +15,19 @@
   }
   var parentGuardianField = $('#editrow-custom_350');
   if (parentGuardianField.length) {
-    if ($("[name=custom_350]:checked").val() != "1") {
+    var parentFieldValue = $('[name=custom_350]:checked').val();
+    if (typeof parentFieldValue !== 'undefined' && parentFieldValue != "1") {
       $('#editrow-custom_351').show();
     }
     else {
+      $('#custom_351').val("");
       $('#editrow-custom_351').hide();
+      $('#custom_355').val("");
+      $('#custom_356').val("");
+      $('#custom_357').val("");
+      $('#editrow-custom_355').hide();
+      $('#editrow-custom_356').hide();
+      $('#editrow-custom_357').hide();
     }
     if ($('#custom_351').val().toLowerCase().indexOf('foster') !== -1) {
       $('#editrow-custom_355').show();
@@ -27,6 +35,9 @@
       $('#editrow-custom_357').show();
     }
     else {
+      $('#custom_355').val("");
+      $('#custom_356').val("");
+      $('#custom_357').val("");
       $('#editrow-custom_355').hide();
       $('#editrow-custom_356').hide();
       $('#editrow-custom_357').hide();
@@ -49,12 +60,17 @@
     function parentGuardianFieldShow(show) {
       if (show) {
         parentGuardianField.show();
-        $('#editrow-custom_351').show();
       }
       else {
         parentGuardianField.hide();
+        $('#custom_351').val("");
+        $('#custom_355').val("");
+        $('#custom_356').val("");
+        $('#custom_357').val("");
         $('#editrow-custom_351').hide();
-        $('#editrow-custom_351').val('');
+        $('#editrow-custom_355').show();
+        $('#editrow-custom_356').show();
+        $('#editrow-custom_357').show();
       }
     };
     $("[name=custom_350]").change(function() {
@@ -62,7 +78,14 @@
         $('#editrow-custom_351').show();
       }
       else {
+        $('#custom_351').val("");
+        $('#custom_355').val("");
+        $('#custom_356').val("");
+        $('#custom_357').val("");
         $('#editrow-custom_351').hide();
+        $('#editrow-custom_356').hide();
+        $('#editrow-custom_357').hide();
+        $('#editrow-custom_355').hide();
       }
     });
     $('#custom_351').change(function() {
