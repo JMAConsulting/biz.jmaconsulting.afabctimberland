@@ -181,10 +181,10 @@ function afabctimberland_civicrm_buildForm($formName, &$form) {
 
 function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
   if ($formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
-    if (!empty($fields['custom_360'])) {
-      if ($fields['custom_360'] == 2) {
-        if (empty($fields['custom_355'])) {
-          $errors['custom_355'] = E::ts('You need to supply your social worker\'s email address');
+    if (!empty($fields['custom_353'])) {
+      if ($fields['custom_353'] == 2) {
+        if (empty($fields['custom_358'])) {
+          $errors['custom_358'] = E::ts('You need to supply your social worker\'s email address');
         }
         if (empty($fields['custom_356'])) {
           $errors['custom_356'] = E::ts('You need to supply your social worker\'s first name');
@@ -198,8 +198,8 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
         }
       }
     }
-    if ($fields['price_1445'] != '4099' && $fields['price_1445'] != '4094' && empty($fields['custom_359'])) {
-      $errors['custom_359'] = E::ts('Please supply the age of this participant');
+    if ($fields['price_1651'] != '4703' && $fields['price_1651'] != '4720' && empty($fields['custom_355'])) {
+      $errors['custom_355'] = E::ts('Please supply the age of this participant');
     }
   }
 }
@@ -253,13 +253,13 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
           }
           elseif ($formParams['additional_registration_type'] == 2) {
             $children[] = $participantDetails['contact_id'];
-            if (!empty($formParams['custom_355'])) {
-              if (!in_array($formParams['custom_355'], $socialWorkerEmails)) {
+            if (!empty($formParams['custom_358'])) {
+              if (!in_array($formParams['custom_358'], $socialWorkerEmails)) {
                 $socialWorkerEmails[] = $formParams['custom_355'];
                 $swParams = [
                   'first_name' => $formParams['custom_356'],
                   'last_name' => $formParams['custom_357'],
-                  'email' => $formParams['custom_355'],
+                  'email' => $formParams['custom_358'],
                   'contact_type' => 'Individual',
                 ];
                 $dedupeParams = CRM_Dedupe_Finder::formatParams($swParams, 'Individual');
@@ -268,7 +268,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
                 $swParams['contact_id'] = CRM_Utils_Array::value('0', $dupes, NULL);
                 $result = civicrm_api3('Contact', 'create', $swParams);
                 $socialWorkerDetails[] = [
-                  'email' => $formParams['custom_355'],
+                  'email' => $formParams['custom_358'],
                   'first_name' => $formParams['custom_356'],
                   'last_name' => $formParams['custom_357'],
                   'contact_id' => $result['id'],
@@ -278,8 +278,8 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
             }
           }
           else {
-            $priceOptionSelected = array_keys($formParams['price_1445']);
-            if ($priceOptionSelected[0] != '4099' && $priceOptionSelected[0] != '4094') {
+            $priceOptionSelected = array_keys($formParams['price_1651']);
+            if ($priceOptionSelected[0] != '4703' && $priceOptionSelected[0] != '4720') {
               $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
               civicrm_api3('Contact', 'create', [
                 'do_not_email' => 1,
@@ -294,8 +294,8 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
           }
         }
         elseif (is_numeric($particpantId)) {
-          $priceOptionSelected = array_keys($formParams['price_1445']);
-          if ($priceOptionSelected[0] != '4099' && $priceOptionSelected[0] != '4094') {
+          $priceOptionSelected = array_keys($formParams['price_1651']);
+          if ($priceOptionSelected[0] != '4703' && $priceOptionSelected[0] != '4720') {
             try {
               $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
               civicrm_api3('Contact', 'create', [

@@ -1,24 +1,24 @@
 (function($) {
-  if ($('[name=price_1445]:checked').val() != "4094" && $('[name=price_1445]:checked').val() != "4099") {
-    $('#editrow-custom_358').show();
-    $('#editrow-custom_359').show();
+  if ($('[name=price_1651]:checked').val() != "4703" && $('[name=price_1651]:checked').val() != "4720") {
+    $('#editrow-custom_355').show();
+    $('#editrow-custom_362').show();
   }
   else {
-    $('#custom_359').val('').trigger('change');
-    $('#editrow-custom_359').hide();
-    $('#custom_358').val('').trigger('change');
-    $('#editrow-custom_358').hide();
+    $('#custom_362').val('').trigger('change');
+    $('#editrow-custom_362').hide();
+    $('#custom_355').val('').trigger('change');
+    $('#editrow-custom_355').hide();
   }
-  $('[name=price_1445]').change(function() {
-    if ($(this).val() != "4094" && $(this).val() != "4099") {
-      $('#editrow-custom_359').show();
-      $('#editrow-custom_358').show();
+  $('[name=price_1651]').change(function() {
+    if ($(this).val() != "4703" && $(this).val() != "4720") {
+      $('#editrow-custom_362').show();
+      $('#editrow-custom_355').show();
     }
     else {
-      $('#custom_359').val('').trigger('change');
-      $('#editrow-custom_359').hide();
-      $('#custom_358').val('').trigger('change');
-      $('#editrow-custom_358').hide();
+      $('#custom_362').val('').trigger('change');
+      $('#editrow-custom_362').hide();
+      $('#custom_355').val('').trigger('change');
+      $('#editrow-custom_355').hide();
     }
   });
 })(CRM.$);
