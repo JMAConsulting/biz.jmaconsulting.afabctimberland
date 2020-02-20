@@ -151,6 +151,10 @@ function afabctimberland_civicrm_themes(&$themes) {
 function afabctimberland_civicrm_buildForm($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Register' || $formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
     CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/priceSetValidation.js');
+    CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/childage.js');
+  }
+  if ($formName === 'CRM_Event_Form_Registration_Register') {
+    CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/primaryParticipant.js');
   }
   if ($formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
     $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Social');
@@ -169,17 +173,17 @@ function afabctimberland_civicrm_buildForm($formName, &$form) {
 }
 
 function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
-  if ($formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
+  if ($formName === 'CRM_Event_Form_Registration_AdditionalParticipant' || $formName === 'CRM_Event_Form_Registration_Register') {
     if (!empty($fields['custom_360'])) {
       if ($fields['custom_360'] == 2) {
         if (empty($fields['custom_355'])) {
           $errors['custom_355'] = E::ts('You need to supply your social worker\'s email address');
         }
         if (empty($fields['custom_356'])) {
-          $errors['custom_355'] = E::ts('You need to supply your social worker\'s first name');
+          $errors['custom_356'] = E::ts('You need to supply your social worker\'s first name');
         }
         if (empty($fields['custom_357'])) {
-          $errors['custom_355'] = E::ts('You need to supply your social worker\'s last name');
+          $errors['custom_357'] = E::ts('You need to supply your social worker\'s last name');
         }
       }
     }

@@ -10,6 +10,7 @@
       $('#editrow-custom_355').hide();
       $('#editrow-custom_356').hide();
       $('#editrow-custom_357').hide();
+      $('#editrow-custom_360').show();
     }
     else if ($('#custom_360').val() == "2") {
       $('#editrow-custom_355').show();
@@ -17,6 +18,7 @@
       $('#editrow-custom_357').show();
       $('#custom_361').val("");
       $('#editrow-custom_361').hide();
+      $('#editrow-custom_360').show();
     }
     else if ($('#custom_360').val() == "3") {
       $('#editrow-custom_361').show();
@@ -26,22 +28,17 @@
       $('#editrow-custom_355').hide();
       $('#editrow-custom_356').hide();
       $('#editrow-custom_357').hide();
-    }
-    var additionalRegistrationType = $('#additional_registration_type');
-    if (additionalRegistrationType.val() != "2") {
-      parentGuardianFieldShow(false);
+      $('#editrow-custom_360').show();
     }
     else {
+      parentGuardianFieldShow(false);
+    }
+    if ($('[name=price_1445]:checked') != "4094" && $('[name=price_1445]:checked') != "4099") {
       parentGuardianFieldShow(true);
     }
-    additionalRegistrationType.on('change', function() {
-      if (additionalRegistrationType.val() != "2") {
-        parentGuardianFieldShow(false);
-      }
-      else {
-        parentGuardianFieldShow(true);
-      }
-    });
+    else {
+      parentGuardianFieldShow(false);
+    }
     function parentGuardianFieldShow(show) {
       if (show) {
         parentGuardianField.show();
