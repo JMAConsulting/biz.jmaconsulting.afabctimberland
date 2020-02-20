@@ -170,8 +170,8 @@ function afabctimberland_civicrm_buildForm($formName, &$form) {
 
 function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
   if ($formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
-    if (!empty($fields['custom_351'])) {
-      if (stristr($fields['custom_351'], 'foster')) {
+    if (!empty($fields['custom_360'])) {
+      if ($fields['custom_360'] == 2) {
         if (empty($fields['custom_355'])) {
           $errors['custom_355'] = E::ts('You need to supply your social worker\'s email address');
         }
@@ -256,7 +256,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
             }
           }
         }
-        elseif (is_numeric($particpantId)) {
+        elseif (is_numeric($particpantId) && $formParams['price_1445'] != '4099' && $formParams['price_1445'] != '4094') {
           try {
            $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
             civicrm_api3('Contact', 'create', [
