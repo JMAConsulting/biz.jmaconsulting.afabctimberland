@@ -150,14 +150,14 @@ function afabctimberland_civicrm_themes(&$themes) {
  */
 function afabctimberland_civicrm_buildForm($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Register' || $formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
-    $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Social');
+    $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Camp');
     if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
       CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/priceSetValidation.js');
       CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/waivers.js');
     }
   }
   if ($formName === 'CRM_Event_Form_Registration_AdditionalParticipant') {
-    $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Social');
+    $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Camp');
     if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
       CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/additionalParticipants.js');
       CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/childage.js');
@@ -202,7 +202,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Confirm') {
     $sendEmail = FALSE;
     $socialWorkerEmails = $socialWorkerDetails = [];
-    $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Social');
+    $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Camp');
     if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
       $primaryPartner = $form->get('primaryContactId');
       $partners = $children = [];
