@@ -5,4 +5,14 @@
   clientrights.hide().next('label').hide();
   supervision.hide().next('label').hide();
   cancellation.hide().next('label').hide();
+  if ($('#custom_360').length) {
+    if ($('#custom_360').val() == "2") {
+      $('.crm-profile-id-55').hide();
+    }
+    $('#custom_360').change(function() {
+      if ($(this).val() == "2") {
+        $('.crm-profile-id-55').hide();
+      }
+    });
+  }
 })(CRM.$);

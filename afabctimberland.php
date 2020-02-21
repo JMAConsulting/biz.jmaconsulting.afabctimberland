@@ -186,6 +186,12 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
         if (empty($fields['custom_357'])) {
           $errors['custom_357'] = E::ts('You need to supply your social worker\'s last name');
         }
+        $waiverFields = ['custom_323', 'custom_83', 'custom_123', 'custom_305', 'custom_306'];
+        foreach ($waiverFields as $waiverField) {
+          if (array_key_exists($waiverField, $errors) !== FALSE) {
+            unset($errors[$waiverField]);
+          }
+        }
       }
     }
     if ($fields['price_1445'] != '4099' && $fields['price_1445'] != '4094' && empty($fields['custom_359'])) {
