@@ -188,9 +188,7 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
         }
         $waiverFields = ['custom_323', 'custom_83', 'custom_123', 'custom_305', 'custom_306'];
         foreach ($waiverFields as $waiverField) {
-          if (array_key_exists($waiverField, $errors) !== FALSE) {
-            unset($errors[$waiverField]);
-          }
+          $form->setElementError($waiverField, NULL);
         }
       }
     }

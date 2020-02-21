@@ -9,9 +9,15 @@
     if ($('#custom_360').val() == "2") {
       $('.crm-profile-id-55').hide();
     }
+    else {
+      $('.crm-profile-id-55').show();
+    }
     $('#custom_360').change(function() {
       if ($(this).val() == "2") {
         $('.crm-profile-id-55').hide();
+      }
+      else {
+        $('.crm-profile-id-55').show();
       }
     });
   }
