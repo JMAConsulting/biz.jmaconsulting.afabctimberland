@@ -64,6 +64,7 @@
         $('#editrow-custom_356').show();
         $('#editrow-custom_357').show();
         $('#editrow-custom_358').show();
+        $('#editrow-custom_354').hide()
       }
       else {
         if ($(this).val() == "3") {

@@ -192,7 +192,7 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
         if (empty($fields['custom_357'])) {
           $errors['custom_357'] = E::ts('You need to supply your social worker\'s last name');
         }
-        $waiverFields = ['custom_323', 'custom_83', 'custom_123', 'custom_305', 'custom_306'];
+        $waiverFields = ['custom_323', 'custom_83', 'custom_123', 'custom_367', 'custom_368'];
         foreach ($waiverFields as $waiverField) {
           $form->setElementError($waiverField, NULL);
         }
@@ -346,9 +346,9 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
           }
         }
       }
-      if ($sendEmail) {
-        sendSocialWorkerEmail($socialWorkerDetails, $partners, $primaryPartner, $form);
-      }
+      //if ($sendEmail) {
+        // sendSocialWorkerEmail($socialWorkerDetails, $partners, $primaryPartner, $form);
+      //}
     }
   }
 }
@@ -360,7 +360,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
  * @param int $clientID
  * @param CRM_Core_Form $form
  */
-function sendSocialWorkerEmail($socialWorkersDetails, $partners, $clientID, $form) {
+/*function sendSocialWorkerEmail($socialWorkersDetails, $partners, $clientID, $form) {
   foreach ($socialWorkersDetails as $socialWorker) {
     $registration = civicrm_api3('Participant', 'getsingle', ['contact_id' => $clientID, 'event_id' => $form->_eventId]);
     if (!empty($partners)) {
@@ -391,4 +391,4 @@ function sendSocialWorkerEmail($socialWorkersDetails, $partners, $clientID, $for
     ];
     CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
   }
-}
+}*/

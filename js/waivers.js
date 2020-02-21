@@ -5,14 +5,14 @@
   clientrights.hide().next('label').hide();
   supervision.hide().next('label').hide();
   cancellation.hide().next('label').hide();
-  if ($('#custom_360').length) {
-    if ($('#custom_360').val() == "2") {
+  if ($('#custom_353').length) {
+    if ($('#custom_353').val() == "2") {
       $('.crm-profile-id-55').hide();
     }
     else {
       $('.crm-profile-id-55').show();
     }
-    $('#custom_360').change(function() {
+    $('#custom_353').change(function() {
       if ($(this).val() == "2") {
         $('.crm-profile-id-55').hide();
       }
