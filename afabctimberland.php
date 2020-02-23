@@ -210,7 +210,7 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
       }
     }
     if (!empty($fields['price_1654'])) {
-      if ($fields['price_1654'] == '4713' && ((!empty($fields['price_1652']) && $fields['price_1654'] == '4707') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4716'))) {
+      if ($fields['price_1654'] == '4713' && ((!empty($fields['price_1652']) && $fields['price_1652'] == '470') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4716'))) {
         $errors['price_1654'] = E::ts('Please check your selection options you have multiple activities at 9am selected');
       }
       if ($fields['price_1654'] == '4714' && ((!empty($fields['price_1652']) && $fields['price_1652'] == '4708') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4717'))) {
@@ -221,7 +221,7 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
       }
     }
     if (!empty($fields['price_1655'])) {
-      if ($fields['price_1655'] == '4716' && ((!empty($fields['price_1652']) && $fields['price_1654'] == '4707') || (!empty($fields['price_1654']) && $fields['price_1654'] == '4713'))) {
+      if ($fields['price_1655'] == '4716' && ((!empty($fields['price_1652']) && $fields['price_1652'] == '4707') || (!empty($fields['price_1654']) && $fields['price_1654'] == '4713'))) {
         $errors['price_1655'] = E::ts('Please check your selection options you have multiple activities at 9am selected');
       }
       if ($fields['price_1655'] == '4717' && ((!empty($fields['price_1652']) && $fields['price_1652'] == '4708') || (!empty($fields['price_1654']) && $fields['price_1654'] == '4714'))) {
