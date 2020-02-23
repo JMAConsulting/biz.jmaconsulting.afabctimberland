@@ -198,8 +198,50 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
         }
       }
     }
-    if ($fields['price_1651'] != '4703' && $fields['price_1651'] != '4720' && empty($fields['custom_355'])) {
+    if (!empty($fields['price_1651']) && $fields['price_1651'] != '4703' && $fields['price_1651'] != '4720' && empty($fields['custom_355'])) {
       $errors['custom_355'] = E::ts('Please supply the age of this participant');
+    }
+    if (!empty($fields['price_1652'])) {
+      if ($fields['price_1652'] == '4707' && ((!empty($fields['price_1654']) && $fields['price_1654'] == '4713') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4716'))) {
+        $errors['price_1652'] = E::ts('Please check your selection options you have multiple activities at 9am selected');
+      }
+      if ($fields['price_1652'] == '4708' && ((!empty($fields['price_1654']) && $fields['price_1654'] == '4714') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4717'))) {
+        $errors['price_1652'] = E::ts('Please check your selection options you have multiple activities at 10am selected');
+      }
+    }
+    if (!empty($fields['price_1654'])) {
+      if ($fields['price_1654'] == '4713' && ((!empty($fields['price_1652']) && $fields['price_1654'] == '4707') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4716'))) {
+        $errors['price_1654'] = E::ts('Please check your selection options you have multiple activities at 9am selected');
+      }
+      if ($fields['price_1654'] == '4714' && ((!empty($fields['price_1652']) && $fields['price_1652'] == '4708') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4717'))) {
+        $errors['price_1654'] = E::ts('Please check your selection options you have multiple activities at 10am selected');
+      }
+      if ($fields['price_1654'] == '4715' && ((!empty($fields['price_1653']) && $fields['price_1653'] == '4711') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4718'))) {
+        $errors['price_1654'] = E::ts('Please check your selection options you have multiple activities at 11am selected');
+      }
+    }
+    if (!empty($fields['price_1655'])) {
+      if ($fields['price_1655'] == '4716' && ((!empty($fields['price_1652']) && $fields['price_1654'] == '4707') || (!empty($fields['price_1654']) && $fields['price_1654'] == '4713'))) {
+        $errors['price_1655'] = E::ts('Please check your selection options you have multiple activities at 9am selected');
+      }
+      if ($fields['price_1655'] == '4717' && ((!empty($fields['price_1652']) && $fields['price_1652'] == '4708') || (!empty($fields['price_1654']) && $fields['price_1654'] == '4714'))) {
+        $errors['price_1655'] = E::ts('Please check your selection options you have multiple activities at 10am selected');
+      }
+      if ($fields['price_1655'] == '4718' && ((!empty($fields['price_1653']) && $fields['price_1653'] == '4711') || (!empty($fields['price_1654']) && $fields['price_1654'] == '4715'))) {
+        $errors['price_1655'] = E::ts('Please check your selection options you have multiple activities at 11am selected');
+      }
+      if ($fields['price_1655'] == '4719' && !empty($fields['price_1653']) && $fields['price_1653'] == '4712') {
+        $errors['price_1655'] = E::ts('Please check your selection options you have multiple activities at 1pm selected');
+      }
+    }
+
+    if (!empty($fields['price_1653'])) {
+      if ($fields['price_1653'] == '4711' && ((!empty($fields['price_1654']) && $fields['price_1654'] == '4715') || (!empty($fields['price_1655']) && $fields['price_1655'] == '4718'))) {
+        $errors['price_1653'] = E::ts('Please check your selection options you have multiple activities at 11am selected');
+      }
+      if ($fields['price_1653'] == '4712' && !empty($fields['price_1655']) && $fields['price_1655'] == '4719') {
+        $errors['price_1653'] = E::ts('Please check your selection options you have multiple activities at 1pm selected');
+      }
     }
   }
 }
