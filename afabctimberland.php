@@ -236,7 +236,7 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
                   'contact_type' => 'Individual',
                 ];
                 $dedupeParams = CRM_Dedupe_Finder::formatParams($swParams, 'Individual');
-                $dedupeParams['check_permissions'] = FALSE;
+                $dedupeParams['check_permission'] = FALSE;
                 $dupes = CRM_Dedupe_Finder::dupesByParams($dedupeParams, 'Individual', NULL, [], 9);
                 $swParams['contact_id'] = CRM_Utils_Array::value('0', $dupes, NULL);
                 $result = civicrm_api3('Contact', 'create', $swParams);
