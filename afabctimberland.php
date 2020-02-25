@@ -171,6 +171,12 @@ function afabctimberland_civicrm_buildForm($formName, &$form) {
       ]);
     }
   }
+  if ($formName === 'CRM_Event_Form_Registration_Confirm' || $formName === 'CRM_Event_Form_Registration_ThankYou') {
+    $familySocialEventType = CRM_Core_PseudoConstant::getKey('CRM_Event_BAO_Event', 'event_type_id', 'Family Camp');
+    if ($form->_values['event']['event_type_id'] == $familySocialEventType) {
+      CRM_Core_Resources::singleton()->addScriptFile('biz.jmaconsulting.afabctimberland', 'js/confirmThankyouSocialWorker.js');
+    }
+  }
 }
 
 function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
@@ -251,7 +257,8 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
             }
           }
           else {
-            if ($formParams['price_1445'] != '4099' && $formParams['price_1445'] != '4094') {
+            $priceOptionSelected = array_keys($formParams['price_1445']);
+            if ($priceOptionSelected[0] != '4099' && $priceOptionSelected[0] != '4094') {
               $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
               civicrm_api3('Contact', 'create', [
                 'do_not_email' => 1,
@@ -265,20 +272,23 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
             }
           }
         }
-        elseif (is_numeric($particpantId) && $formParams['price_1445'] != '4099' && $formParams['price_1445'] != '4094') {
-          try {
-           $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
-            civicrm_api3('Contact', 'create', [
-              'do_not_email' => 1,
-              'do_not_phone' => 1,
-              'do_not_trade' => 1,
-              'do_not_sms' => 1,
-              'is_opt_out' => 1,
-              'contact_id' => $participantDetails['contact_id'],
-              'contact_type' => 'Individual',
-            ]);
-          }
-          catch (Exception $e) {   
+        elseif (is_numeric($particpantId)) {
+          $priceOptionSelected = array_keys($formParams['price_1445']);
+          if ($priceOptionSelected[0] != '4099' && $priceOptionSelected[0] != '4094') {
+            try {
+              $participantDetails = civicrm_api3('Participant', 'getsingle', ['id' => $particpantId]);
+              civicrm_api3('Contact', 'create', [
+                'do_not_email' => 1,
+                'do_not_phone' => 1,
+                'do_not_trade' => 1,
+                'do_not_sms' => 1,
+                'is_opt_out' => 1,
+                'contact_id' => $participantDetails['contact_id'],
+                'contact_type' => 'Individual',
+              ]);
+            }
+            catch (Exception $e) {
+            }
           }
         }
       }
@@ -324,8 +334,8 @@ function afabctimberland_civicrm_postProcess($formName, &$form) {
 
 /**
  * If any social worker information has been added send them an email requesting confirmation
- * @param array $socialWorkersDetails,
- * @param array $partners,
+ * @param array $socialWorkersDetails
+ * @param array $partners
  * @param int $clientID
  * @param CRM_Core_Form $form
  */
