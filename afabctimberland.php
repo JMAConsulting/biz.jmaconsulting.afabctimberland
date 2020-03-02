@@ -214,7 +214,7 @@ function afabctimberland_civicrm_pre($op, $objectName, $id, &$params) {
          INNER JOIN civicrm_contact c ON c.id = r.contact_id_b
          LEFT JOIN civicrm_contact cc ON cc.id = r.contact_id_a
          INNER JOIN civicrm_participant p ON p.contact_id = c.id
-         WHERE p.id = %1 AND r.relationship_type_id = 1 AND r.is_active = 1", [1 => [$parentId, "Integer"]])->fetchAll()[0]; // We expec 
+         WHERE p.id = %1 AND r.relationship_type_id = 1 AND r.is_active = 1", [1 => [$parentId, "Integer"]])->fetchAll()[0]; // We expect only a single contact
       if (!empty($parentDetails)) {
         if (($parentDetails['first_name'] == $params['first_name']) && ($parentDetails['last_name'] == $params['last_name'])) {
           // Dupe found
