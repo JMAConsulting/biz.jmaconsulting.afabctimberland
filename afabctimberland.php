@@ -204,6 +204,27 @@ function afabctimberland_civicrm_validateForm($formName, &$fields, &$files, &$fo
   }
 }
 
+function afabctimberland_civicrm_pre($op, $objectName, $id, &$params) {
+  if ($objectName == "Individual" && !empty($params['additional_registration_type']) && ($params['additional_registration_type'] == 2)) {
+    $parentId = CRM_Utils_Array::value('registered_by_id', $params, NULL);
+    // Check to see if relationship exists.
+    if ($parentId) {
+      $parentDetails = CRM_Core_DAO::executeQuery("SELECT r.contact_id_a, cc.first_name, cc.last_name
+         FROM civicrm_relationship r
+         INNER JOIN civicrm_contact c ON c.id = r.contact_id_b
+         LEFT JOIN civicrm_contact cc ON cc.id = r.contact_id_a
+         INNER JOIN civicrm_participant p ON p.contact_id = c.id
+         WHERE p.id = %1 AND r.relationship_type_id = 1 AND r.is_active = 1", [1 => [$parentId, "Integer"]])->fetchAll()[0]; // We expect only a single contact
+      if (!empty($parentDetails)) {
+        if (($parentDetails['first_name'] == $params['first_name']) && ($parentDetails['last_name'] == $params['last_name'])) {
+          // Dupe found
+          $params["contact_id"] = $parentDetails['contact_id_a'];
+        }
+      }
+    }
+  }
+}
+
 function afabctimberland_civicrm_postProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Confirm') {
     $sendEmail = FALSE;
